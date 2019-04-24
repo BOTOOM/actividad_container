@@ -37,7 +37,7 @@ services:
     ports:
       - '${ADMISIONES_CRUD_PORT}:${ADMISIONES_CRUD_PORT}'
     volumes:
-      - ./workspace/go/src/github.com/BOTOOM/:/home/developer/go/src/github.com/BOTOOM/
+      - ./workspace/go/src/github.com/BOTOOM/:/home/go/src/github.com/BOTOOM/
       - /etc/passwd:/etc/passwd:ro
     user: "$USER_ID"
     depends_on:
@@ -57,7 +57,7 @@ services:
         - USER_ID=$USER_ID
     env_file:
       - .env_secret.env
-    command: sh -c 'git clone https://github.com/BOTOOM/$CLIENT_CLONE_INFO.git ;cd $CLIENT_CLONE_INFO;git checkout $CLIENT_BRANCH_TARGET;git pull origin $CLIENT_BRANCH_TARGET;npm install;npm start oat'
+    command: sh -c 'git clone https://github.com/BOTOOM/$CLIENT_CLONE_INFO.git ;cd $CLIENT_CLONE_INFO;git checkout $CLIENT_BRANCH_TARGET;git pull origin $CLIENT_BRANCH_TARGET;npm install;npm start'
     ports:
       - '$CLIENT_PORT:$CLIENT_PORT'
       - '35729:35729'

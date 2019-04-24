@@ -1,0 +1,4 @@
+workspace/angular/*
+workspace/go/*
+database
+apache2
