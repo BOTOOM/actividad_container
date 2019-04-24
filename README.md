@@ -18,21 +18,8 @@ imagenes
 
 El contenedor tiene
 
-* [campuscliente](https://github.com/udistrital/campus_cliente)
-* [utilsoas](https://github.com/udistrital/utils_oas)
-* [campusmid](https://github.com/udistrital/campus_mid)
-* [personascrud](https://github.com/udistrital/personas_crud)
-* [organizacioncrud](https://github.com/udistrital/organizacion_crud)
-* [entecrud](https://github.com/udistrital/ente_crud)
-* [ubicacionescrud](https://github.com/udistrital/ubicaciones_crud)
-* [documentoscrud](https://github.com/udistrital/documentos_crud)
-* [formacionacademicacrud](https://github.com/udistrital/formacion_academica_crud)
-* [experiencialaboralcrud](https://github.com/udistrital/experiencia_laboral_crud)
-* [corecrud](https://github.com/udistrital/core_crud)
-* [programaacademicocrud](https://github.com/udistrital/programa_academico_crud)
-* [idiomascrud](https://github.com/udistrital/idiomas_crud)
-* [admisionescrud](https://github.com/udistrital/admisiones_crud)
-
+* [actividades_cliente](https://github.com/BOTOOM/actividades_cliente)
+* [actividades_crud](https://github.com/BOTOOM/actividades_crud)
 ## Configuracion:
 
 Por defecto apache corre en el puerto 80 y postgres en el 5432, esto puede cambiarse en el archivo docker-compose.yml
