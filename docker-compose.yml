@@ -1,0 +1,69 @@
+version: "2"
+
+services:
+  postgresdb:
+      image: postgres:9.5
+      environment:
+        - POSTGRES_USER=${DB_BUILD_USER}
+        - POSTGRES_PASSWORD=${DB_BUILD_PASS}
+        - POSTGRES_DB=${DB_BUILD_NAME}
+        - SCHEMASPY_SCHEMA=${SCHEMASPY_SCHEMA}
+      ports:
+        - '5432:5432'
+      user: "$USER_ID"
+      volumes:
+          - ./database:/var/lib/postgresql/data
+          - ./bkup:/bkup
+          - /etc/passwd:/etc/passwd:ro
+  schemaspy:
+      build:
+        context: ./schemaspy_build
+        args:
+          - PROXY=$PROXY
+      volumes:
+          - ./workspace/angular/schemaspy:/output
+      links:
+          - postgresdb:database
+  admisionescrud:
+    #image: golang:1.8
+    build:
+      context: ./bee_build
+      args:
+          - PROXY=$PROXY
+          - USER_ID=$USER_ID
+    env_file:
+      - .env_secret.env
+    command: sh -c 'go get github.com/BOTOOM/$ADMISIONES_CRUD_GET_INFO;cd src/github.com/BOTOOM/$ADMISIONES_CRUD_GET_INFO;git checkout $ADMISIONES_CRUD_BRANCH_TARGET;git pull origin $ADMISIONES_CRUD_BRANCH_TARGET;bee run -downdoc=true -gendoc=true'
+    ports:
+      - '${ADMISIONES_CRUD_PORT}:${ADMISIONES_CRUD_PORT}'
+    volumes:
+      - ./workspace/go/src/github.com/BOTOOM/:/home/developer/go/src/github.com/BOTOOM/
+      - /etc/passwd:/etc/passwd:ro
+    user: "$USER_ID"
+    depends_on:
+      - postgresdb
+  apache2:
+    image: httpd:2.4-alpine
+    ports:
+     - "80:80"
+    volumes:
+     - ./apache2/sites-enabled:/etc/apache2/sites-enabled
+     - ./workspace/angular:/usr/local/apache2/htdocs/
+  client:
+    build:
+      context: ./genoas_build
+      args:
+        - PROXY=$PROXY
+        - USER_ID=$USER_ID
+    env_file:
+      - .env_secret.env
+    command: sh -c 'git clone https://github.com/BOTOOM/$CLIENT_CLONE_INFO.git ;cd $CLIENT_CLONE_INFO;git checkout $CLIENT_BRANCH_TARGET;git pull origin $CLIENT_BRANCH_TARGET;npm install;npm start oat'
+    ports:
+      - '$CLIENT_PORT:$CLIENT_PORT'
+      - '35729:35729'
+    depends_on:
+      - postgresdb
+      - admisionescrud
+    volumes:
+      - ./workspace/angular:/workspace/angular
+    user: "$USER_ID"
